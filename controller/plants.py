@@ -2,6 +2,10 @@ import pandas as pd
 
 class Plants:
 
+    @property
+    def pumps(self):
+        return self._by_pump
+
     def __init__(self, pumps=["1", "2", "3", "4"]):
         self._df = None
         self._by_pump = dict()
