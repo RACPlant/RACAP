@@ -7,7 +7,7 @@ protocol = Protocol("/dev/ttyACM0")
 
 while True:
     protocol.get_metrics()
-    for pump in plants.pumps:
+#    for pump in plants.pumps:
         # if planner
-        protocol.water_in(pump)
-    time.sleep(1)
+    protocol.water_in(2)
+    time.sleep(10)
