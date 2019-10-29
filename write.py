@@ -1,9 +1,12 @@
 import analizer
 import planner
 import time
+import sys
 from controller.protocol import Protocol
 
-protocol = Protocol("/dev/ttyACM0")
+port = sys.argv[1] if (len(sys.argv) == 2) else "ACM0"
+
+protocol = Protocol("/dev/tty{}".format(port))
 
 while True:
     protocol.get_metrics()
