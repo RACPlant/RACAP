@@ -29,7 +29,7 @@ class Protocol:
     def read_until(self):
         with self._connect() as conn:
             logger.debug("Reading ... ")
-            sensor_data = conn.read_until(END))
+            sensor_data = conn.read_until(END)
             logger.debug("Readed message: \"%s\"", sensor_data)
         return sensor_data
 
