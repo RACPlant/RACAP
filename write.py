@@ -17,6 +17,6 @@ protocol = Protocol("/dev/tty{}".format(port))
 while True:
     logger.info("Start loop...")
     protocol.get_metrics()
-    protocol.water_in(2)
+#    protocol.water_in(2)
     time.sleep(10)
     logger.info("End loop.")
