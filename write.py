@@ -3,7 +3,7 @@ import planner
 import time
 from controller.protocol import Protocol
 
-protocol = Protocol("/dev/ttyS3")
+protocol = Protocol("/dev/ttyACM0")
 
 while True:
     protocol.get_metrics()
