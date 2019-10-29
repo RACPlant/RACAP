@@ -1,8 +1,13 @@
 import serial
+import logging
 
 METRICS = "getMetrics"
 WATER = "water"
 END = "endMessage"
+
+FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(format=FORMAT, level=logging.DEBUG)
+logger = logging.getLogger("Protocol")
 
 
 class Protocol:
@@ -15,11 +20,14 @@ class Protocol:
 
     def _send_message(self, message):
         with self._connect() as conn:
-            conn.writelines(message)
+            logger.debug("Sending message \"%s\"", message)
+            conn.write(message)
 
     def read_until(self):
         with self._connect() as conn:
+            logger.debug("Reading ... ")
             sensor_data = conn.read_until(str.encode("{}".format(END)))
+            logger.debug("Readed message: \"%s\"", sensor_data)
         return sensor_data
 
     def parse(self, data):

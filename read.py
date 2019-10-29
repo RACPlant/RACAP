@@ -7,6 +7,7 @@ from controller.plants import Plants
 plants = Plants()
 plants.set_info()
 
+
 protocol = Protocol("/dev/ttyACM0", Parser())
 
 while True:
