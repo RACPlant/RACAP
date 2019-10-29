@@ -14,4 +14,6 @@ protocol = Protocol("/dev/tty{}".format(port), Parser())
 while True:
     data = protocol.read_until()
     kind, parsed_data = protocol.parse(data)
+    print(kind)
+    print(parsed_data)
     # to analyser

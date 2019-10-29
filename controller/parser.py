@@ -8,11 +8,11 @@ class Parser:
         self._data = data
         return self
 
-    def metric(self):
+    def metrics(self):
         return (
             "metric",
             {
-
+                "data": self._data
             }
         )
 
