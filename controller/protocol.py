@@ -9,13 +9,13 @@ class Protocol:
 
     def _read_until(self):
         with self._connect() as conn:
-            sensor_data = conn.read_until("finishMessage")
+            sensor_data = conn.read_until(b"endMessage")
         return sensor_data
 
     def _send_message(self, message):
         with self._connect() as conn:
-            conn.writelines(message)
-
+            conn.write(message)
+            
     def get_metrics(self):
         self._send_message(b"getMetrics")
         return self._read_until()
