@@ -19,7 +19,7 @@ class Protocol:
 
     def read_until(self):
         with self._connect() as conn:
-            sensor_data = conn.read_until(b"{}".format(END))
+            sensor_data = conn.read_until(str.encode("{}".format(END)))
         return sensor_data
 
     def parse(self, data):
@@ -31,7 +31,7 @@ class Protocol:
             raise IOError("Data not recognized")
 
     def get_metrics(self):
-        return self._send_message(b"{}".format(METRICS))
+        return self._send_message(str.encode("{}".format(METRICS)))
 
     def water_in(self, pump):
-        return self._send_message(b"{}:{}".format(WATER, pump))
+        return self._send_message(str.encode("{}:{}".format(WATER, pump)))
