@@ -22,6 +22,7 @@ class Protocol:
         with self._connect() as conn:
             logger.debug("Sending message \"%s\"", message)
             conn.write(message)
+            conn.flush()
 
     def read_until(self):
         with self._connect() as conn:
