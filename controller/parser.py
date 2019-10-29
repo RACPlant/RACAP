@@ -15,10 +15,11 @@ class Parser:
 
             }
         )
+
     def water(self):
         return (
             "water",
             {
-                
+
             }
         )
