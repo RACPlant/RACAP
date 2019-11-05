@@ -4,8 +4,7 @@ from controller.protocol import Protocol
 from controller.parser import Parser
 from controller import get_logger
 
-logger = get_logger("Consumer", filename='consumer.log', filemode='w')
-
+logger = get_logger("Consumer")
 port = sys.argv[1] if (len(sys.argv) == 2) else "ACM0"
 
 protocol = Protocol("/dev/tty{}".format(port))

@@ -1,11 +1,14 @@
 import logging
 import os
 
+LOGLEVEL = os.environ.get('LOGLEVE', 'INFO')
+logging.basicConfig(level=LOGLEVEL)
+
 
 def get_logger(name, **kwargs):
-    LOGLEVEL = os.environ.get('LOGLEVE', 'INFO')
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=LOGLEVEL,
-        **kwargs)
-    return logging.getLogger(name)
+    fomatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler = logging.FileHandler(f'{name}.log')
+    handler.setFormatter(fomatter)
+    logger = logging.getLogger(name)
+    logger.addHandler(handler)
+    return logger
