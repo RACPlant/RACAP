@@ -7,7 +7,7 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 class KnowledgeBase:
 
     def __init__(self,
-                 rules_file,
+                 rules_file=[],
                  metrics_fact_file="metrics.pl",
                  plants_fact_file="plants.pl",
                  prolog=Prolog()):
@@ -25,11 +25,11 @@ class KnowledgeBase:
 
     def __include_fact(self, kb_file, predicative, *terms):
         terms_string = ", ".join(terms)
-        fact = f"{predicative}({terms_string})."
+        fact = "{}({}).".format(predicative, terms_string)
         register_time = datetime.now().strftime(DATE_FORMAT)
 
         with open(kb_file, "a") as kb:
-            kb.write(f"{fact}%% registered:{register_time}\n")
+            kb.write("{}%% registered:{}\n".format(fact, register_time))
 
     def _consult(self):
         for file_path in self._file_path:
