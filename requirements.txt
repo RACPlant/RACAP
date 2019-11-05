@@ -2,3 +2,4 @@ pandas
 numpy>=1.16.*
 pyswip==0.2.9
 pyserial==3.4
+autopep8==1.4.4
