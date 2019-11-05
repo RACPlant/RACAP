@@ -3,10 +3,6 @@ import pandas as pd
 
 class Plants:
 
-    @property
-    def pumps(self):
-        return self._by_pump
-
     def __init__(self, pumps=["1", "2", "3", "4"]):
         self._df = None
         self._by_pump = dict()
@@ -14,6 +10,10 @@ class Plants:
         for pump in pumps:
             self._by_pump[pump] = None
             self._water_info[pump] = None
+
+    @property
+    def pumps(self):
+        return self._by_pump
 
     def __load_by_pump(self):
         # call jp API or mock self._plants

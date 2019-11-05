@@ -6,23 +6,65 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 class KnowledgeBase:
 
-    def __init__(self, file_path, prolog=Prolog()):
-        self._file_path = file_path
+    def __init__(self,
+                 rules_file,
+                 metrics_fact_file="metrics.pl",
+                 plants_fact_file="plants.pl",
+                 prolog=Prolog()):
+        """Prolog KnowledgeBase
+
+        Args:
+            file_path (list[str]): List of Prolog files
+            prolog (Prolog, optional): Object to run querys on KnowledgeBase.
+            Defaults to Prolog().
+        """
+        self._metrics_fact_file = metrics_fact_file
+        self._plants_fact_file = plants_fact_file
+        self._file_path = [metrics_fact_file, plants_fact_file] + rules_file
         self._prolog = prolog
 
-    def metrify(self, arduino, sensor, value):
-        self._persist("metrify({}, {}, {}).".format(
-            arduino.lower(), sensor.lower(), value))
+    def __include_fact(self, kb_file, predicative, *terms):
+        terms_string = ", ".join(terms)
+        fact = f"{predicative}({terms_string})."
+        register_time = datetime.now().strftime(DATE_FORMAT)
 
-    def _persist(self, fact):
-        with open(self._file_path, "a") as kb:
-            kb.write("{}%% registered: {}\n".format(
-                fact, datetime.now().strftime(DATE_FORMAT)))
+        with open(kb_file, "a") as kb:
+            kb.write(f"{fact}%% registered:{register_time}\n")
 
     def _consult(self):
-        self._prolog.consult(self._file_path)
+        for file_path in self._file_path:
+            self._prolog.consult(file_path)
 
-    def query(self, arduino, sensor, value, limit=-1):
+    def add_metric_fact(self, arduino, sensor, value):
+        """Include a new fact in metrics knowledge base (Prolog file).
+
+        Args:
+            arduino (str): Arduino Id
+            sensor (str): Sensor Id
+            value (int): Value from sensor
+        """
+        self.__include_fact(self._metrics_fact_file,
+                            "metrify",
+                            arduino,
+                            sensor,
+                            value)
+
+    def add_plant_fact(self, plant, arduino, humidity_sensor, pump):
+        """Include a new plant register in plants knowledge base (Prolog file).
+
+        Args:
+            plant (str): Plant type
+            arduino (str): Arduino id
+            humidity_sensor (str): Humidity soil sensor id
+            pump (str): Pump id
+        """
+        self.__include_fact(self._plants_fact_file,
+                            "plant",
+                            plant,
+                            arduino,
+                            humidity_sensor,
+                            pump)
+
+    def query(self, prolog_query, limit=-1):
         self._consult()
-        query = "metrify({}, {}, {})".format(arduino, sensor, value)
-        return [result for result in self._prolog.query(query, limit)]
+        return [result for result in self._prolog.query(prolog_query, limit)]

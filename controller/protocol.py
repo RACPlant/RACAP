@@ -33,7 +33,7 @@ class Protocol:
         """Read the serial port until message is finish.
 
         Returns:
-            str -- readed message with start and finish messages.
+            str: Readed message.
         """
         with self._connect() as conn:
             self.logger.debug("Reading ... ")
@@ -42,8 +42,23 @@ class Protocol:
         return sensor_data.decode("utf-8")
 
     def get_metrics(self):
+        """Send message `getMetrics`
+
+        Returns:
+            [None]: Nothing
+        """
         return self._send_message("{}".format(METRICS))
 
     def water_in(self, arduino, pump, time):
+        """Send message to water a plant for some time
+
+        Args:
+            arduino (str): Arduino id
+            pump (str): Pump id
+            time (int): Time in seconds to water the plant
+
+        Returns:
+            [None]: Nothing
+        """
         message_info = [WATER, arduino, pump, time]
-        return self._send_message(":{".join(message_info))
+        return self._send_message(":".join(message_info))
