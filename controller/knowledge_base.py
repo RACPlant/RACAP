@@ -15,7 +15,7 @@ class KnowledgeBase:
                  metrics_fact_file="metrics.pl",
                  plants_fact_file="plants.pl",
                  prolog=Prolog()):
-        self.__kb_metrics_dict = {}
+        self._kb_metrics_dict = {}
         self._metrics_fact_file = metrics_fact_file
         self._plants_fact_file = plants_fact_file
         self._file_path = [metrics_fact_file, plants_fact_file] + rules_file
@@ -34,10 +34,13 @@ class KnowledgeBase:
 
     def update_metrics_file(self):
         text = ""
-        for arduino in self.__kb_info_dict.keys():
-            for sensor in self.__kb_info_dict[arduino].keys():
+        for arduino in self.__kb_metrics_dict.keys():
+            for sensor in self.__kb_metrics_dict[arduino].keys():
                 text += "{}\n".format(
-                    self.__kb_info_dict[arduino][sensor].get_fact())
+                    self.__kb_metrics_dict[arduino][sensor].get_fact())
+
+        text += "%% log processed at {}".format(
+            datetime.now().strftime(DATE_FORMAT))
 
         self.logger.info("Writing the Metric Fact File")
         self.logger.debug("Matric Fact File Content: {}".format(text))
@@ -52,13 +55,13 @@ class KnowledgeBase:
             sensor (str): Sensor Id
             value (int): Value from sensor
         """
-        if not self.__kb_metrics_dict.get(arduino):
-            self.__kb_metrics_dict[arduino] = {}
+        if not self._kb_metrics_dict.get(arduino):
+            self._kb_metrics_dict[arduino] = {}
 
-        if not self.__kb_metrics_dict[arduino].get(sensor):
-            self.__kb_metrics_dict[arduino][sensor] = Sensor(arduino, sensor)
+        if not self._kb_metrics_dict[arduino].get(sensor):
+            self._kb_metrics_dict[arduino][sensor] = Sensor(arduino, sensor)
 
-        self.__kb_metrics_dict[arduino][sensor].value = value
+        self._kb_metrics_dict[arduino][sensor].value = value
 
     def query(self, prolog_query, limit=-1):
         self._consult()

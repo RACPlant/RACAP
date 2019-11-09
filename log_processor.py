@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from controller.knowledge_base import KnowledgeBase
 import time
 from json import loads
@@ -15,14 +16,17 @@ def parser_line(line):
 
 
 with open('Consumer.log', 'r') as consumer_logfile:
-    while True:
+
+    line = consumer_logfile.readline()
+    while line:
+        metric_log = parser_line(line)
+        kb.add_metric_fact(
+            metric_log['arduino'],
+            metric_log['sensor'],
+            metric_log['value'])
+
+        print(consumer_logfile.tell())
         line = consumer_logfile.readline()
-        if line:
-            metric_log = parser_line(line)
-            kb.add_metric_fact(
-                metric_log['arduino'],
-                metric_log['sensor'],
-                metric_log['value'])
-            kb.update_metrics_file()
-            print(consumer_logfile.tell())
-        time.sleep(1)
+
+        #time.sleep(1)
+    kb.update_metrics_file()
