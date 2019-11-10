@@ -1,19 +1,23 @@
+import statistics
+
+NOISE_ATTENUATOR = 10
 
 class Sensor:
 
     def __init__(self, arduino_id, sensor_id):
         self.arduino_id = arduino_id
         self.sensor_id = sensor_id
-        self._value = 0
+        self._last_value = 0
         self._max = 0
         self._min = 1023
         self._sum = 0
         self._count_values = 0
+        self._samples = []
 
     def get_fact(self):
         tuple_value = ",".join([self.arduino_id,
                                 self.sensor_id,
-                                str(self._value),
+                                str(self._last_value),
                                 str(self._max),
                                 str(self._min),
                                 str(self.get_mean())])
@@ -21,19 +25,26 @@ class Sensor:
 
     @property
     def value(self):
-        return self._value
+        return self._last_value
 
     @value.setter
     def value(self, value):
-        self._value = float(value)
-        self._count_values += 1
-        self._sum += self._value
+        _last_value = float(value)
+        if len(self._samples) < NOISE_ATTENUATOR:
+            self._samples.append(_last_value)
+        else:
+            self._samples.append(_last_value)
+            self._last_value = statistics.median(self._samples)
+            self._samples = []
+        
+            self._count_values += 1
+            self._sum += self._last_value
 
-        if self._value < self._min:
-            self._min = self._value
+            if self._last_value < self._min:
+                self._min = self._last_value
 
-        if self._value > self._max:
-            self._max = self._value
+            if self._last_value > self._max:
+                self._max = self._last_value
 
     def get_max(self):
         return self._max

@@ -1,5 +1,7 @@
 import serial
+import time
 from controller import get_logger
+from controller.sensor import NOISE_ATTENUATOR
 
 METRICS = "getMetrics"
 WATER = "water"
@@ -47,7 +49,9 @@ class Protocol:
         Returns:
             [None]: Nothing
         """
-        return self._send_message("{}".format(METRICS))
+        for i in range(NOISE_ATTENUATOR):
+            self._send_message("{}".format(METRICS))
+            time.sleep(10)
 
     def water_in(self, arduino, pump, time):
         """Send message to water a plant for some time
