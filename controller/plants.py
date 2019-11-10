@@ -24,10 +24,10 @@ class Plants:
         for water_info in self._water_info[slot]:
             tuple_value = ",".join([self._arduino,
                                     slot,
-                                    self._water_info[slot]["botanical_name"],
-                                    self._water_info[slot]["eto"],
-                                    self._water_info[slot]["predicted"],
-                                    self._water_info[slot]["water"])
+                                    water_info["botanical_name"].lower(),
+                                    str(water_info["eto"]),
+                                    str(water_info["predicted"]),
+                                    str(water_info["water"])])
             facts.append("plant({}).".format(tuple_value))
         return "\n".join(facts)
 
@@ -35,11 +35,11 @@ class Plants:
         # call jp API or mock
         return {
                 '0': {
-                    'botanical_name': 'Capsicum frutescens',
+                    'botanical_name': 'Abelia chinensis',
                     'name': 'Pimenteira'
                 },
                 '1': {
-                    'botanical_name': 'Nephrolepis Exaltata',
+                    'botanical_name': 'Abelia floribunda',
                     'name': 'Samambaia'
                 }
             }
@@ -56,5 +56,5 @@ class Plants:
         if not any(self._by_slot.values()):
             self._by_slot = self.__load_by_arduino()
             for slot in self._by_slot:
-                self._water_info[slot] = self._df[self._df["Botanical Name"]
+                self._water_info[slot] = self._df[self._df["botanical_name"]
                                                   == self._by_slot[slot]["botanical_name"]].to_dict('records')
