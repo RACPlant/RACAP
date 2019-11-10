@@ -1,4 +1,4 @@
-.PHONY: lint requester consumer log_processor log_backup user_data test
+.PHONY: setup lint test requester consumer log_processor log_backup user_data
 
 setup:
 	@pip install -r requirements_dev.txt
@@ -6,6 +6,11 @@ setup:
 
 lint:
 	@autopep8 -a --in-place --recursive *.py
+
+test:
+	@nosetests --with-coverage -s --cover-erase --cover-package=controller
+
+# runners
 
 consumer:
 	@python consumer.py
@@ -18,9 +23,6 @@ log_backup:
 
 user_data:
 	@python user_data.py
-	
+
 requester:
 	@python requester.py
-
-test:
-	@nosetests --with-coverage -s --cover-erase --cover-package=controller
