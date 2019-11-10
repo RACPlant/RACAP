@@ -21,24 +21,17 @@ class KnowledgeBase:
         self._file_path = [metrics_fact_file, plants_fact_file] + rules_file
         self._prolog = prolog
 
-    def __include_fact(self, kb_file, predicative, *terms):
-        terms_string = ", ".join(terms)
-        fact = "{}({}).".format(predicative, terms_string)
-        register_time = datetime.now().strftime(DATE_FORMAT)
-        with open(kb_file, "a") as kb:
-            kb.write("{}%% registered:{}\n".format(fact, register_time))
-
     def _consult(self):
         for file_path in self._file_path:
             self._prolog.consult(file_path)
 
     def update_metrics_file(self):
         text = ""
-        for arduino in self.__kb_metrics_dict.keys():
-            for sensor in self.__kb_metrics_dict[arduino].keys():
+        for arduino in self._kb_metrics_dict.keys():
+            for sensor in self._kb_metrics_dict[arduino].keys():
                 text += "{}\n".format(
-                    self.__kb_metrics_dict[arduino][sensor].get_fact())
-
+                    self._kb_metrics_dict[arduino][sensor].get_fact())
+                print("CCCCCC - ", self._kb_metrics_dict[arduino][sensor])
         text += "%% log processed at {}".format(
             datetime.now().strftime(DATE_FORMAT))
 
@@ -62,6 +55,7 @@ class KnowledgeBase:
             self._kb_metrics_dict[arduino][sensor] = Sensor(arduino, sensor)
 
         self._kb_metrics_dict[arduino][sensor].value = value
+        print("BBBBBB - ", self._kb_metrics_dict[arduino][sensor])
 
     def query(self, prolog_query, limit=-1):
         self._consult()
