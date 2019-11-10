@@ -65,4 +65,4 @@ class Protocol:
             [None]: Nothing
         """
         message_info = [WATER, arduino, pump, time]
-        return self._send_message(":".join(message_info))
+        self._send_message(":".join(message_info))
