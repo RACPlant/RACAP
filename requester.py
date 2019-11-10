@@ -23,5 +23,5 @@ while True:
         for plant in how_much:
             protocol.water_in(plant["arduino"], plant["pump"], plant["time"])
             time.sleep(5)
-    time.sleep(10)
+    time.sleep(60*30) # 30 minutes
     logger.info("End loop.")

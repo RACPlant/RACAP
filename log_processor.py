@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# run every hour
 from database.knowledge_base import KnowledgeBase
 import time
 from json import loads
@@ -25,7 +26,6 @@ with open('Consumer.log', 'r') as consumer_logfile:
             metric_log['sensor'],
             metric_log['value'])
 
-        print(consumer_logfile.tell())
         line = consumer_logfile.readline()
 
     kb.update_metrics_file()

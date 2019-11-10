@@ -1,11 +1,11 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
+# run every 00:00:00
 
 LOG_FILE="Consumer.log"
-LIMIT_LINES=1000
 
 while true; do
-    echo Starting validation...
-    [ $(wc -l $LOG_FILE | cut -f1 -d" ") -ge $LIMIT_LINES ] && mv $LOG_FILE /tmp/"${LOG_FILE}_$(date +%F_%T)"
+    echo Starting backup...
+    mv $LOG_FILE /tmp/"${LOG_FILE}_$(date +%F_%T)"
     sleep 10;
     echo Process finished!
 done
