@@ -107,4 +107,5 @@ venv.bak/
 .vscode
 
 # kb files
-*.pl
+*.log
+database/db/*.pl

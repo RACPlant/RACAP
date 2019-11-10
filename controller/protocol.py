@@ -10,14 +10,14 @@ class Protocol:
 
     logger = get_logger("Protocol")
 
-    def __init__(self, serial_port):
+    def __init__(self, argv):
         """Protocol class that handles message exchanges
 
         Args:
-            serial_port (int):  Arduino's serial port. Usually is /dev/ttyACM0.
+            argv (list):  argv[1] is Arduino's serial port. Usually is ACM0.
         """
-
-        self.serial_port = serial_port
+        port = argv[1] if (len(argv) == 2) else "ACM0"
+        self.serial_port = "/dev/tty{}".format(port)
 
     def _connect(self):
         return serial.Serial(self.serial_port)

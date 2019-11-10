@@ -1,12 +1,13 @@
 import unittest
-from controller.knowledge_base import KnowledgeBase
+from os import path
+from database.knowledge_base import KnowledgeBase, DB_PATH
 from unittest import mock
 from freezegun import freeze_time
 
 
 class TestKnowledgeBase(unittest.TestCase):
 
-    @mock.patch('controller.knowledge_base.Sensor')
+    @mock.patch('database.knowledge_base.Sensor')
     def test_add_metric_fact_should_create_one_Sensor(self, mock_sensor):
         kb = KnowledgeBase()
         sensor_instance = mock_sensor.return_value
@@ -16,7 +17,7 @@ class TestKnowledgeBase(unittest.TestCase):
         mock_sensor.assert_called_once_with("a1", "s1")
         assert sensor_instance.value == 10
 
-    @mock.patch('controller.knowledge_base.Sensor')
+    @mock.patch('database.knowledge_base.Sensor')
     def test_add_metric_fact_should_create_more_than_one_Sensor(self, mock_sensor):
         kb = KnowledgeBase()
         s1 = mock.Mock()
@@ -33,7 +34,7 @@ class TestKnowledgeBase(unittest.TestCase):
         assert s2.value == 20
 
     @freeze_time("2012-01-14")
-    @mock.patch('controller.knowledge_base.Sensor')
+    @mock.patch('database.knowledge_base.Sensor')
     def test_update_metrics_file(self, mock_sensor):
         kb = KnowledgeBase()
         s1 = mock.Mock()
@@ -48,7 +49,7 @@ class TestKnowledgeBase(unittest.TestCase):
 
             kb.update_metrics_file()
 
-            mock_file.assert_called_once_with("metrics.pl", "+w")
+            mock_file.assert_called_once_with(path.join(DB_PATH, "metrics.pl"), "+w")
 
             mock_file().write.assert_called_with(
                 "sensor(a1,s1,1,1,1,1).\n%% log processed at 2012-01-14 00:00:00")

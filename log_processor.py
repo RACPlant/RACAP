@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from controller.knowledge_base import KnowledgeBase
+from database.knowledge_base import KnowledgeBase
 import time
 from json import loads
 
@@ -28,5 +28,4 @@ with open('Consumer.log', 'r') as consumer_logfile:
         print(consumer_logfile.tell())
         line = consumer_logfile.readline()
 
-        #time.sleep(1)
     kb.update_metrics_file()

@@ -5,9 +5,8 @@ from controller.parser import Parser
 from controller import get_logger_to_file
 
 logger = get_logger_to_file("Consumer")
-port = sys.argv[1] if (len(sys.argv) == 2) else "ACM0"
 
-protocol = Protocol("/dev/tty{}".format(port))
+protocol = Protocol(sys.argv)
 parser = Parser()
 
 while True:
