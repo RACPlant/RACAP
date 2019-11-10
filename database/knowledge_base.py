@@ -17,7 +17,7 @@ class KnowledgeBase:
                  metrics_fact_file="metrics.pl",
                  plants_fact_file="plants.pl",
                  prolog=Prolog()):
-        self._kb_metrics_dict = {}
+        self._kb_metrics_dict = self._kb_plants_dict = {}
         self._metrics_fact_file = path.join(DB_PATH, metrics_fact_file)
         self._plants_fact_file = path.join(DB_PATH, plants_fact_file)
         self._file_path = [metrics_fact_file, plants_fact_file] + rules_files
@@ -58,6 +58,20 @@ class KnowledgeBase:
 
         self._kb_metrics_dict[arduino][sensor].value = value
         print("BBBBBB - ", self._kb_metrics_dict[arduino][sensor])
+
+    def add_plants_fact(self, arduino, plants):
+        self._kb_plants_dict[arduino] = plants.get_all_facts()
+
+    def update_plants_fact(self):
+        text = ""
+        for facts in self._kb_plants_dict.values():
+            text += facts
+        text += "%% got plants at {}".format(
+            datetime.now().strftime(DATE_FORMAT))
+
+        self.logger.info("Writing the Plant Fact File")
+        with open(self._plants_fact_file, "+w") as plants_file:
+            plants_file.write(text)
 
     def query(self, prolog_query, limit=-1):
         self._consult()
