@@ -8,7 +8,7 @@ lint:
 	@autopep8 -a --in-place --recursive *.py
 
 test:
-	@nosetests --with-coverage -s --cover-erase --cover-package=controller
+	@nosetests --with-coverage -s --cover-erase --cover-package=controller --cover-package=database --cover-package=mape
 
 # runners
 
