@@ -23,9 +23,9 @@ while True:
         who_needs = analyzer.who_needs_water(arduino["id"])
         if who_needs:
             how_much = planner.how_much_water(arduino["id"], who_needs)
-            
+
             for plant in how_much:
                 protocol.water_in(plant["Pump"], plant["Water"])
                 time.sleep(5)
-    time.sleep(60*30) # 30 minutes
+    time.sleep(60*30)  # 30 minutes
     logger.info("End loop.")

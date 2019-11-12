@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import sys
 import threading
 import uuid
 from controller import get_logger_to_file
@@ -11,6 +10,7 @@ arduinos = Arduino("api_endpoint")
 
 protocols = [SerialProtocol(arduino["port"]) for arduino in arduinos.all]
 
+
 def consume_serial(protocol):
     logger = get_logger_to_file("Consumer{}".format(uuid.uuid4().hex))
     parser = Parser()
@@ -19,6 +19,7 @@ def consume_serial(protocol):
         parsed_data = parser.parse(data)
         for metric in parsed_data:
             logger.info(metric)
+
 
 for protocol in protocols:
     t = threading.Thread(target=consume_serial, args=(protocol,))

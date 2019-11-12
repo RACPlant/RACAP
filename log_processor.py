@@ -10,6 +10,7 @@ kb = KnowledgeBase()
 
 log_files = glob.glob("Consumer*.log")
 
+
 def parser_line(line):
     start_index = line.find('{')
     end_index = line.rfind('}')
@@ -18,7 +19,7 @@ def parser_line(line):
     return loads(json_line)
 
 
-for log in log_files
+for log in log_files:
     with open(log, 'r') as consumer_logfile:
 
         line = consumer_logfile.readline()
