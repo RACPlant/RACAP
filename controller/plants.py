@@ -14,7 +14,8 @@ class Plants:
             self._by_slot[str(slot)] = None
 
     def get_all_facts(self):
-        facts = self._get_slot_facts()
+        facts = []
+        facts.append(self._get_slot_facts())
         facts.append(self._get_eto_facts())
         facts.append(self._get_plant_facts())
         return "\n".join(facts)
@@ -22,10 +23,10 @@ class Plants:
     def _get_slot_facts(self):
         facts = []
         for slot in self._by_slot:
-            tuple_value = ",".join([self._arduino,
-                                    slot,
-                                    self._by_slot[slot]["humidity"],
-                                    self._by_slot[slot]["pump"]
+            tuple_value = ",".join([str(self._arduino),
+                                    str(slot),
+                                    str(self._by_slot[slot]["humidity"]),
+                                    str(self._by_slot[slot]["pump"])
                                     ])
             facts.append("slot({}).".format(tuple_value))
         return "\n".join(facts)
@@ -34,9 +35,9 @@ class Plants:
         facts = []
         for slot in self._by_slot.keys():
             for water_info in self._water_info[slot]:
-                tuple_value = ",".join([self._arduino,
-                                        slot,
-                                        water_info["botanical_name"].lower()
+                tuple_value = ",".join([str(self._arduino),
+                                        str(slot),
+                                        str(water_info["botanical_name"]).lower()
                                         ])
                 facts.append("plant({}).".format(tuple_value))
         return "\n".join(facts)
@@ -45,7 +46,7 @@ class Plants:
         facts = []
         for slot in self._by_slot:
             for water_info in self._water_info[slot]:
-                tuple_value = ",".join([water_info["botanical_name"].lower(),
+                tuple_value = ",".join([str(water_info["botanical_name"]).lower(),
                                         str(water_info["eto"]),
                                         str(water_info["predicted"]),
                                         str(water_info["water"])

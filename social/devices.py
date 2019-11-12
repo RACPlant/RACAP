@@ -8,6 +8,32 @@ class Arduino:
         return [
             {
                 "id": "0",
-                "port": "/dev/ttyACM0"
+                "port": "/dev/ttyACM0",
+                "radiation": "r1",
+                "temperature": "t1"
             }
         ]
+    
+    def _get_radiation_fact(self):
+        facts = []
+        for arduino in self.all:
+            tuple_value = ",".join([str(arduino["id"]),
+                                    str(arduino["radiation"])
+                                    ])
+            facts.append("is_radiation({}).".format(tuple_value))
+        return "\n".join(facts)
+
+    def _get_temperature_fact(self):
+        facts = []
+        for arduino in self.all:
+            tuple_value = ",".join([str(arduino["id"]),
+                                    str(arduino["temperature"])
+                                    ])
+            facts.append("is_temperature({}).".format(tuple_value))
+        return "\n".join(facts)
+
+    def get_all_facts(self):
+        facts = []
+        facts.append(self._get_radiation_fact())
+        facts.append(self._get_temperature_fact())
+        return "\n".join(facts)

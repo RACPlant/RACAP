@@ -17,11 +17,17 @@ class KnowledgeBase:
                  rules_files=[],
                  metrics_fact_file="metrics.pl",
                  plants_fact_file="plants.pl",
+                 arduino_fact_file="arduino.pl",
                  prolog=Prolog()):
         self._kb_metrics_dict = self._kb_plants_dict = {}
         self._metrics_fact_file = path.join(DB_PATH, metrics_fact_file)
         self._plants_fact_file = path.join(DB_PATH, plants_fact_file)
-        self._file_path = [metrics_fact_file, plants_fact_file] + rules_files
+        self._arduino_fact_file = path.join(DB_PATH, arduino_fact_file)
+        self._file_path = [
+            self._metrics_fact_file,
+            self._plants_fact_file,
+            self._arduino_fact_file
+        ] + rules_files
         self._prolog = prolog
 
     def _consult(self):
@@ -81,6 +87,19 @@ class KnowledgeBase:
         self.logger.info("Writing the Plant Fact File")
         with open(self._plants_fact_file, "+w") as plants_file:
             plants_file.write(text)
+
+    def update_arduino_fact(self, arduinos):
+        """This method generates the knowledge base for arduino (Prolog file).
+        Args:
+            arduinos (Arduino): Arduino object
+        """
+        text = arduinos.get_all_facts()
+        text += "%% got arduino at {}".format(
+            datetime.now().strftime(DATE_FORMAT))
+
+        self.logger.info("Writing the Arduino Fact File")
+        with open(self._arduino_fact_file, "+w") as arduino_file:
+            arduino_file.write(text)
 
     def query(self, prolog_query, limit=-1):
         """This method runs a Prolog query over rules_files,

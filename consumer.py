@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import threading
+import uuid
 from controller import get_logger_to_file
 from social.devices import Arduino
 from social.serial_protocol import SerialProtocol
@@ -11,7 +12,7 @@ arduinos = Arduino("api_endpoint")
 protocols = [SerialProtocol(arduino["port"]) for arduino in arduinos.all]
 
 def consume_serial(protocol):
-    logger = get_logger_to_file("Consumer")
+    logger = get_logger_to_file("Consumer{}".format(uuid.uuid4().hex))
     parser = Parser()
     while True:
         data = protocol.read_until()

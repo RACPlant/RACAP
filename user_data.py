@@ -8,13 +8,14 @@ from database.knowledge_base import KnowledgeBase
 logger = get_logger("Requester")
 
 arduinos = Arduino("api_endpoint")
+kb = KnowledgeBase()
+kb.update_arduino_fact(arduinos)
 
 for arduino in arduinos.all:
 
     plants = Plants(arduino["id"])
     plants.set_info()
 
-    kb = KnowledgeBase()
     kb.add_plants_fact(arduino["id"], plants)
 
 kb.update_plants_fact()

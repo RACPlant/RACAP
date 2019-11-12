@@ -25,7 +25,7 @@ while True:
             how_much = planner.how_much_water(arduino["id"], who_needs)
             
             for plant in how_much:
-                protocol.water_in(plant["pump"], plant["time"])
+                protocol.water_in(plant["Pump"], plant["Water"])
                 time.sleep(5)
     time.sleep(60*30) # 30 minutes
     logger.info("End loop.")

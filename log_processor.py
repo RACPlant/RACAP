@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # run every hour
-from database.knowledge_base import KnowledgeBase
 import time
+import glob
+from database.knowledge_base import KnowledgeBase
 from json import loads
 
 
 kb = KnowledgeBase()
 
+log_files = glob.glob("Consumer*.log")
 
 def parser_line(line):
     start_index = line.find('{')
@@ -16,16 +18,17 @@ def parser_line(line):
     return loads(json_line)
 
 
-with open('Consumer.log', 'r') as consumer_logfile:
-
-    line = consumer_logfile.readline()
-    while line:
-        metric_log = parser_line(line)
-        kb.add_metric_fact(
-            metric_log['arduino'],
-            metric_log['sensor'],
-            metric_log['value'])
+for log in log_files
+    with open(log, 'r') as consumer_logfile:
 
         line = consumer_logfile.readline()
+        while line:
+            metric_log = parser_line(line)
+            kb.add_metric_fact(
+                metric_log['arduino'],
+                metric_log['sensor'],
+                metric_log['value'])
 
-    kb.update_metrics_file()
+            line = consumer_logfile.readline()
+
+kb.update_metrics_file()
