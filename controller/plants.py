@@ -5,30 +5,52 @@ MAX_SLOTS = 10
 
 class Plants:
 
-    def __init__(self, arduino):
+    def __init__(self, arduino_id):
         self._df = None
-        self._arduino = arduino
+        self._arduino = arduino_id
         self._by_slot = dict()
         self._water_info = dict()
         for slot in range(MAX_SLOTS):
             self._by_slot[str(slot)] = None
 
     def get_all_facts(self):
-        facts = []
-        for slot in self._by_slot.keys():
-            facts.append(self._get_facts(slot))
+        facts = self._get_slot_facts()
+        facts.append(self._get_eto_facts())
+        facts.append(self._get_plant_facts())
         return "\n".join(facts)
 
-    def _get_facts(self, slot):
+    def _get_slot_facts(self):
         facts = []
-        for water_info in self._water_info[slot]:
+        for slot in self._by_slot:
             tuple_value = ",".join([self._arduino,
                                     slot,
-                                    water_info["botanical_name"].lower(),
-                                    str(water_info["eto"]),
-                                    str(water_info["predicted"]),
-                                    str(water_info["water"])])
-            facts.append("plant({}).".format(tuple_value))
+                                    self._by_slot[slot]["humidity"],
+                                    self._by_slot[slot]["pump"]
+                                    ])
+            facts.append("slot({}).".format(tuple_value))
+        return "\n".join(facts)
+
+    def _get_plant_facts(self):
+        facts = []
+        for slot in self._by_slot.keys():
+            for water_info in self._water_info[slot]:
+                tuple_value = ",".join([self._arduino,
+                                        slot,
+                                        water_info["botanical_name"].lower()
+                                        ])
+                facts.append("plant({}).".format(tuple_value))
+        return "\n".join(facts)
+
+    def _get_eto_facts(self):
+        facts = []
+        for slot in self._by_slot:
+            for water_info in self._water_info[slot]:
+                tuple_value = ",".join([water_info["botanical_name"].lower(),
+                                        str(water_info["eto"]),
+                                        str(water_info["predicted"]),
+                                        str(water_info["water"])
+                                        ])
+                facts.append("eto_water({}).".format(tuple_value))
         return "\n".join(facts)
 
     def __load_by_arduino(self):
@@ -36,11 +58,15 @@ class Plants:
         return {
             '0': {
                 'botanical_name': 'Abelia chinensis',
-                'name': 'Pimenteira'
+                'name': 'Pimenteira',
+                'pump': 'p1',
+                'humidity': 'h1'
             },
             '1': {
                 'botanical_name': 'Abelia floribunda',
-                'name': 'Samambaia'
+                'name': 'Samambaia',
+                'pump': 'p2',
+                'humidity': 'h2'
             }
         }
 

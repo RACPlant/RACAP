@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
 import sys
-from controller.protocol import Protocol
-from controller.parser import Parser
+import threading
 from controller import get_logger_to_file
+from social.devices import Arduino
+from social.serial_protocol import SerialProtocol
+from social.parser import Parser
 
-logger = get_logger_to_file("Consumer")
+arduinos = Arduino("api_endpoint")
 
-protocol = Protocol(sys.argv)
-parser = Parser()
+protocols = [SerialProtocol(arduino["port"]) for arduino in arduinos.all]
 
-while True:
-    data = protocol.read_until()
-    parsed_data = parser.parse(data)
-    for metric in parsed_data:
-        logger.info(metric)
+def consume_serial(protocol):
+    logger = get_logger_to_file("Consumer")
+    parser = Parser()
+    while True:
+        data = protocol.read_until()
+        parsed_data = parser.parse(data)
+        for metric in parsed_data:
+            logger.info(metric)
+
+for protocol in protocols:
+    t = threading.Thread(target=consume_serial, args=(protocol,))
+    t.start()

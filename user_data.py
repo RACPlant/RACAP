@@ -2,19 +2,19 @@
 # run every 6 hours
 from controller import get_logger
 from controller.plants import Plants
-from controller.social import Social
+from social.devices import Arduino
 from database.knowledge_base import KnowledgeBase
 
 logger = get_logger("Requester")
 
-social = Social("api_endpoint")
+arduinos = Arduino("api_endpoint")
 
-for arduino in social.arduinos:
+for arduino in arduinos.all:
 
-    plants = Plants(arduino)
+    plants = Plants(arduino["id"])
     plants.set_info()
 
     kb = KnowledgeBase()
-    kb.add_plants_fact(arduino, plants)
+    kb.add_plants_fact(arduino["id"], plants)
 
 kb.update_plants_fact()
