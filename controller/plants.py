@@ -37,7 +37,7 @@ class Plants:
             for water_info in self._water_info[slot]:
                 tuple_value = ",".join([str(self._arduino),
                                         str(slot),
-                                        str(water_info["botanical_name"]).lower()
+                                        str(water_info["botanical_name"]).lower().replace(" ","_")
                                         ])
                 facts.append("plant({}).".format(tuple_value))
         return "\n".join(facts)
@@ -46,7 +46,7 @@ class Plants:
         facts = []
         for slot in self._by_slot:
             for water_info in self._water_info[slot]:
-                tuple_value = ",".join([str(water_info["botanical_name"]).lower(),
+                tuple_value = ",".join([str(water_info["botanical_name"]).lower().replace(" ","_"),
                                         str(water_info["eto"]),
                                         str(water_info["predicted"]),
                                         str(water_info["water"])

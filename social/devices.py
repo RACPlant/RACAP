@@ -7,10 +7,10 @@ class Arduino:
         # mock or call jp api
         return [
             {
-                "id": "0",
+                "id": "arduino_1",
                 "port": "/dev/ttyACM0",
-                "radiation": "r1",
-                "temperature": "t1"
+                "radiation": "r",
+                "temperature": "t"
             }
         ]
     

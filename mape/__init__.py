@@ -10,7 +10,7 @@ class MAPE:
         self._kb = KnowledgeBase(rules_files)
 
     def _get_rules(self):
-        base_folder = "./rules/"
+        base_folder = "./mape/rules/"
         rules_files = []
 
         for rule_file in self._rules_files:
