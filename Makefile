@@ -1,4 +1,4 @@
-.PHONY: setup lint test requester consumer log_processor log_backup user_data
+.PHONY: setup lint test requester consumer main log_backup user_data
 
 setup:
 	@pip install -r requirements_dev.txt
@@ -15,8 +15,8 @@ test:
 consumer:
 	@python consumer.py
 
-log_processor:
-	@python log_processor.py
+main:
+	@python main.py
 
 log_backup:
 	@bash log_backup.sh >> Backup.log
