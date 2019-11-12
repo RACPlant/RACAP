@@ -1,5 +1,6 @@
 from mape import MAPE
 
+
 class Planner(MAPE):
     _rules_files = ["planner.pl"]
 

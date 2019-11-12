@@ -8,6 +8,7 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 DB_PATH = "./database/db/"
 
+
 class KnowledgeBase:
 
     logger = get_logger("KnowledgeBase")
@@ -28,12 +29,13 @@ class KnowledgeBase:
             self._prolog.consult(file_path)
 
     def update_metrics_file(self):
+        """This method generates the knowledge base for metrics (Prolog file).
+        """
         text = ""
         for arduino in self._kb_metrics_dict.keys():
             for sensor in self._kb_metrics_dict[arduino].keys():
                 text += "{}\n".format(
                     self._kb_metrics_dict[arduino][sensor].get_fact())
-                print("CCCCCC - ", self._kb_metrics_dict[arduino][sensor])
         text += "%% log processed at {}".format(
             datetime.now().strftime(DATE_FORMAT))
 
@@ -57,12 +59,19 @@ class KnowledgeBase:
             self._kb_metrics_dict[arduino][sensor] = Sensor(arduino, sensor)
 
         self._kb_metrics_dict[arduino][sensor].value = value
-        print("BBBBBB - ", self._kb_metrics_dict[arduino][sensor])
 
     def add_plants_fact(self, arduino, plants):
+        """Include a new fact in plants knowledge base (Prolog file).
+
+        Args:
+            arduino (str): Arduino Id
+            plants (Plants): Plants object
+        """
         self._kb_plants_dict[arduino] = plants.get_all_facts()
 
     def update_plants_fact(self):
+        """This method generates the knowledge base for plants (Prolog file).
+        """
         text = ""
         for facts in self._kb_plants_dict.values():
             text += facts
@@ -74,5 +83,15 @@ class KnowledgeBase:
             plants_file.write(text)
 
     def query(self, prolog_query, limit=-1):
+        """This method runs a Prolog query over rules_files,
+        metrics_fact_file and plants_fact_file.
+
+        Args:
+            prolog_query (str): Prolog query
+            limit (int, optional): limit for the result size.
+
+        Returns:
+            [list[dict]]: List of dicts with all query answers.
+        """
         self._consult()
         return [result for result in self._prolog.query(prolog_query, limit)]

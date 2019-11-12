@@ -2,6 +2,7 @@ import pandas as pd
 
 MAX_SLOTS = 10
 
+
 class Plants:
 
     def __init__(self, arduino):
@@ -11,7 +12,6 @@ class Plants:
         self._water_info = dict()
         for slot in range(MAX_SLOTS):
             self._by_slot[str(slot)] = None
-
 
     def get_all_facts(self):
         facts = []
@@ -34,18 +34,19 @@ class Plants:
     def __load_by_arduino(self):
         # call jp API or mock
         return {
-                '0': {
-                    'botanical_name': 'Abelia chinensis',
-                    'name': 'Pimenteira'
-                },
-                '1': {
-                    'botanical_name': 'Abelia floribunda',
-                    'name': 'Samambaia'
-                }
+            '0': {
+                'botanical_name': 'Abelia chinensis',
+                'name': 'Pimenteira'
+            },
+            '1': {
+                'botanical_name': 'Abelia floribunda',
+                'name': 'Samambaia'
             }
+        }
 
     def __load_info_dataset(self):
-        df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT-KbxCsv32_6xZfwCi-KQEUeVskm4cAomqczfHPWIYL-3Nj3D9aawaH6yPFohSzvkJaaU9VSjifk1P/pub?gid=590649384&single=true&output=csv")
+        df = pd.read_csv(
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-KbxCsv32_6xZfwCi-KQEUeVskm4cAomqczfHPWIYL-3Nj3D9aawaH6yPFohSzvkJaaU9VSjifk1P/pub?gid=590649384&single=true&output=csv")
         cropped_df = df[["Botanical Name", "Eto", "Predicted", "Water"]]
         cropped_df.columns = ["botanical_name", "eto", "predicted", "water"]
         return cropped_df

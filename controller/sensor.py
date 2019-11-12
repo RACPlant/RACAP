@@ -2,6 +2,7 @@ import statistics
 
 NOISE_ATTENUATOR = 10
 
+
 class Sensor:
 
     def __init__(self, arduino_id, sensor_id):
@@ -36,7 +37,7 @@ class Sensor:
             self._samples.append(_last_value)
             self._last_value = statistics.median(self._samples)
             self._samples = []
-        
+
             self._count_values += 1
             self._sum += self._last_value
 

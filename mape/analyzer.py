@@ -1,5 +1,6 @@
 from mape import MAPE
 
+
 class Analyzer(MAPE):
     _rules_files = ["analyser.pl"]
 
