@@ -15,5 +15,5 @@ while True:
     for arduino in arduinos.all:
         protocol = SerialProtocol(arduino["port"])
         protocol.get_metrics()
-    time.sleep(60*30)  # 30 minutes
+    time.sleep(60 * 30)  # 30 minutes
     logger.info("End loop.")

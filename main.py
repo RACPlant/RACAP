@@ -24,5 +24,3 @@ if log_parser.has_files():
         protocol = SerialProtocol(arduino["port"])
         logger.info("send getMetrics message")
         Cycle(protocol, arduino["id"]).start()
-
-
