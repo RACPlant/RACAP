@@ -14,11 +14,12 @@ protocols = [SerialProtocol(arduino["port"]) for arduino in arduinos.all]
 def consume_serial(protocol):
     logger = get_logger_to_file("Consumer{}".format(uuid.uuid4().hex))
     parser = Parser()
-    while True:
-        data = protocol.read_until()
-        parsed_data = parser.parse(data)
-        for metric in parsed_data:
-            logger.info(metric)
+    with protocol.connect() as conn:
+        while True:
+            data = protocol.read_until(conn)
+            parsed_data = parser.parse(data)
+            for metric in parsed_data:
+                logger.info(metric)
 
 
 for protocol in protocols:

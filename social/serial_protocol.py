@@ -1,5 +1,4 @@
 import serial
-import time
 from controller import get_logger
 
 METRICS = "getMetrics"
@@ -19,26 +18,26 @@ class SerialProtocol:
         """
         self.serial_port = serial_port
 
-    def _connect(self):
+    def connect(self):
         return serial.Serial(self.serial_port)
 
     def _send_message(self, message):
         encoded_message = str.encode(message)
-        with self._connect() as conn:
+        with self.connect() as conn:
             self.logger.debug("Sending message \"%s\"", encoded_message)
             conn.write(encoded_message)
             conn.flush()
 
-    def read_until(self):
+    def read_until(self, conn):
         """Read the serial port until message is finish.
 
         Returns:
             str: Readed message.
         """
-        with self._connect() as conn:
-            self.logger.debug("Reading ... ")
-            sensor_data = conn.read_until(END)
-            self.logger.debug("Readed message: \"%s\"", sensor_data)
+        # with self._connect() as conn:
+        self.logger.debug("Reading ... ")
+        sensor_data = conn.read_until(END)
+        self.logger.debug("Readed message: \"%s\"", sensor_data)
         return sensor_data.decode("utf-8")
 
     def get_metrics(self):
