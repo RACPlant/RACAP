@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import threading
 import uuid
-from controller import get_logger_to_file
+import time
+from serial.serialutil import SerialException
+from controller import get_logger_to_file, get_logger
 from social.devices import Arduino
 from social.serial_protocol import SerialProtocol
 from social.parser import Parser
@@ -14,14 +16,29 @@ protocols = [SerialProtocol(arduino["port"]) for arduino in arduinos.all]
 def consume_serial(protocol):
     logger = get_logger_to_file("Consumer{}".format(uuid.uuid4().hex))
     parser = Parser()
-    with protocol.connect() as conn:
+    error_logger = get_logger("Consume")
+
+    def loop_and_parse(conn):
         while True:
             data = protocol.read_until(conn)
             parsed_data = parser.parse(data)
             for metric in parsed_data:
                 logger.info(metric)
+    
+    def connect_and_parse():
+        try:
+            with protocol.connect() as conn:
+                loop_and_parse()
 
+        except SerialException:
+            error_logger.error("Error connecting to port {}".format(protocol.serial_port))
+            time.sleep(60)
+            error_logger.error("Retrying port {}".format(protocol.serial_port))
+            connect_and_parse()
+
+    connect_and_parse()
 
 for protocol in protocols:
     t = threading.Thread(target=consume_serial, args=(protocol,))
     t.start()
+    

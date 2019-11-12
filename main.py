@@ -22,5 +22,5 @@ if log_parser.has_files():
 
     for arduino in arduinos.all:
         protocol = SerialProtocol(arduino["port"])
-        logger.info("send getMetrics message")
+        logger.info("Start MAPE cycle")
         Cycle(protocol, arduino["id"]).start()
