@@ -21,9 +21,12 @@ def consume_serial(protocol):
     def loop_and_parse(conn):
         while True:
             data = protocol.read_until(conn)
-            parsed_data = parser.parse(data)
-            for metric in parsed_data:
-                logger.info(metric)
+            try:
+                parsed_data = parser.parse(data)
+                for metric in parsed_data:
+                    logger.info(metric)
+            except IOError:
+                logger.info("Error to parse message:{}".format(data))
 
     def connect_and_parse():
         try:
