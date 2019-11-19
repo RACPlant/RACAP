@@ -22,5 +22,6 @@ while True:
             logger.error("Error connecting to port {}, trying in next {} minutes".format(
                 protocol.serial_port, SLEEP_MINUTES
                 ))
-    time.sleep(60 * SLEEP_MINUTES)
     logger.info("End loop.")
+    logger.info("Waiting {} minutes".format(SLEEP_MINUTES))
+    time.sleep(60 * SLEEP_MINUTES)

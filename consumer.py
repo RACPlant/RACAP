@@ -24,21 +24,22 @@ def consume_serial(protocol):
             parsed_data = parser.parse(data)
             for metric in parsed_data:
                 logger.info(metric)
-    
+
     def connect_and_parse():
         try:
             with protocol.connect() as conn:
-                loop_and_parse()
+                loop_and_parse(conn)
 
         except SerialException:
-            error_logger.error("Error connecting to port {}".format(protocol.serial_port))
+            error_logger.error(
+                "Error connecting to port {}".format(protocol.serial_port))
             time.sleep(60)
             error_logger.error("Retrying port {}".format(protocol.serial_port))
             connect_and_parse()
 
     connect_and_parse()
 
+
 for protocol in protocols:
     t = threading.Thread(target=consume_serial, args=(protocol,))
     t.start()
-    
