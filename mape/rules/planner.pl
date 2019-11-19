@@ -1,7 +1,7 @@
 eto_calc(Vr,Vt,Eto):-
     round(0.0135*Vr*(Vt+17.8), Eto).
 
-how_much_water(Arduino,Slot,Plant,Pump,Water):-
+how_much_water(Arduino,Slot,Plant,Pump,Water,Eto):-
     plant(Arduino,Slot,Plant),
     slot(Arduino,Slot,_,Pump),
     is_radiation(Arduino, R),

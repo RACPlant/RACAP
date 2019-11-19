@@ -1,9 +1,9 @@
 import time
 from mape.analyzer import Analyzer
 from mape.planner import Planner
-from controller import get_logger
+from controller import get_logger_to_file
 
-logger = get_logger("Cycle")
+logger = get_logger_to_file("Cycle")
 
 class Cycle:
     def __init__(self, protocol, arduino_id, analyzer=Analyzer(), planner=Planner()):
