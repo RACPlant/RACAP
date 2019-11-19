@@ -17,7 +17,7 @@ class Parser:
             self._data = data
             return self._parse()
         else:
-            raise IOError("Data not recognized")
+            raise IOError("Data not recognized: {}".format(data))
 
     def _parse(self):
         lines = self._data.split(";")[1:-1]
