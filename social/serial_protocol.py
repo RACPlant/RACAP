@@ -58,5 +58,5 @@ class SerialProtocol:
         Returns:
             [None]: Nothing
         """
-        message_info = [WATER, pump, time]
+        message_info = [WATER, pump, str(time)]
         self._send_message(":".join(message_info))

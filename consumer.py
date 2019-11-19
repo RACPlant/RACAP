@@ -31,6 +31,7 @@ def consume_serial(protocol):
     def connect_and_parse():
         try:
             with protocol.connect() as conn:
+                logger.info("Connected...")
                 loop_and_parse(conn)
 
         except SerialException:
