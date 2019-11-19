@@ -4,12 +4,11 @@ from datetime import datetime
 from controller.sensor import Sensor
 from controller import get_logger
 
+
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 DB_PATH = "./database/db/"
 
-
-# TODO: refactor
 class KnowledgeBase:
 
     logger = get_logger("KnowledgeBase")
