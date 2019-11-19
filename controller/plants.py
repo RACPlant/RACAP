@@ -33,15 +33,15 @@ class Plants:
         return "\n".join(facts)
 
     def _get_plant_facts(self):
-        facts = set()
+        facts = []
         for slot, plant in self._by_slot.items():
-            tuple_value = ",".join([str(self._arduino),
+            tuple_value = ",".join([str(self._arduino_slots.arduino_id),
                                     str(slot),
                                     str(plant["botanical_name"]
                                         ).lower().replace(" ", "_")
                                     ])
-            facts.add("plant({}).".format(tuple_value))
-        return "\n".join(list(facts))
+            facts.append("plant({}).".format(tuple_value))
+        return "\n".join(facts)
 
     def _get_eto_facts(self):
         facts = []

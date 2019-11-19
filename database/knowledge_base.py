@@ -79,9 +79,7 @@ class KnowledgeBase:
     def update_plants_fact(self):
         """This method generates the knowledge base for plants (Prolog file).
         """
-        text = ""
-        for facts in self._kb_plants_dict.values():
-            text += facts
+        text = "\n".join(self._kb_plants_dict.values())
         text += "%% got plants at {}".format(
             datetime.now().strftime(DATE_FORMAT))
 
