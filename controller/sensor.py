@@ -54,4 +54,4 @@ class Sensor:
         return self._min
 
     def get_mean(self):
-        return self._sum/(self._count_values or 1)
+        return self._sum / (self._count_values or 1)

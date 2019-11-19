@@ -5,7 +5,7 @@ setup:
 	@pip install -r requirements.txt
 
 lint:
-	@autopep8 -a --in-place --recursive *.py
+	@autopep8 -a --in-place --recursive .
 
 test:
 	@nosetests --with-coverage -s --cover-erase --cover-package=controller --cover-package=database --cover-package=mape

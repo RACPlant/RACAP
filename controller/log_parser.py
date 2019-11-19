@@ -3,6 +3,7 @@ import glob
 
 LOG_FILES = glob.glob("Consumer*.log")
 
+
 class LogParser:
     def __init__(self, kb, log_files=LOG_FILES):
         self._kb = kb
@@ -11,7 +12,7 @@ class LogParser:
     def _parser_line(self, line):
         start_index = line.find('{')
         end_index = line.rfind('}')
-        json_line = line[start_index:end_index+1]
+        json_line = line[start_index:end_index + 1]
         json_line = json_line.replace("'", "\"")
         return json.loads(json_line)
 

@@ -5,8 +5,10 @@ from controller import get_logger_to_file
 
 logger = get_logger_to_file("Cycle")
 
+
 class Cycle:
-    def __init__(self, protocol, arduino_id, analyzer=Analyzer(), planner=Planner()):
+    def __init__(self, protocol, arduino_id,
+                 analyzer=Analyzer(), planner=Planner()):
         self._arduino_id = arduino_id
         self._protocol = protocol
         self._analyzer = analyzer

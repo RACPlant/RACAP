@@ -18,7 +18,8 @@ class TestKnowledgeBase(unittest.TestCase):
         assert sensor_instance.value == 10
 
     @mock.patch('database.knowledge_base.Sensor')
-    def test_add_metric_fact_should_create_more_than_one_Sensor(self, mock_sensor):
+    def test_add_metric_fact_should_create_more_than_one_Sensor(
+            self, mock_sensor):
         kb = KnowledgeBase()
         s1 = mock.Mock()
         s2 = mock.Mock()
@@ -49,7 +50,8 @@ class TestKnowledgeBase(unittest.TestCase):
 
             kb.update_metrics_file()
 
-            mock_file.assert_called_once_with(path.join(DB_PATH, "metrics.pl"), "+w")
+            mock_file.assert_called_once_with(
+                path.join(DB_PATH, "metrics.pl"), "+w")
 
             mock_file().write.assert_called_with(
                 "sensor(a1,s1,1,1,1,1).\n%% log processed at 2012-01-14 00:00:00")

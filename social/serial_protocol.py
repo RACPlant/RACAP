@@ -58,6 +58,8 @@ class SerialProtocol:
         Returns:
             [None]: Nothing
         """
-        self.logger.info("Send message water_in: {}:{}:{}".format(WATER, pump, time))
+        self.logger.info(
+            "Send message water_in: {}:{}:{}".format(
+                WATER, pump, time))
         message_info = [WATER, pump, str(time)]
         self._send_message(":".join(message_info))

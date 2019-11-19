@@ -13,7 +13,7 @@ class Arduino:
                 "temperature": "t"
             }
         ]
-    
+
     def _get_radiation_fact(self):
         facts = []
         for arduino in self.all:

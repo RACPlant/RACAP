@@ -23,5 +23,5 @@ while True:
         except SerialException:
             logger.error("Error connecting to port {}, trying in next {} minutes".format(
                 protocol.serial_port, SLEEP_MINUTES
-                ))
+            ))
     logger.info("End loop.")
