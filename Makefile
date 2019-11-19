@@ -10,8 +10,6 @@ lint:
 test:
 	@nosetests --with-coverage -s --cover-erase --cover-package=controller --cover-package=database --cover-package=mape
 
-# runners
-
 consumer:
 	@python consumer.py
 
@@ -26,3 +24,9 @@ user_data:
 
 requester:
 	@python requester.py
+
+clean:
+	@echo 'Removing Prolog files'
+	@rm database/db/*.pl
+	@echo 'Removing Logfiles'
+	@rm *.log
