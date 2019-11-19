@@ -34,7 +34,6 @@ class SerialProtocol:
         Returns:
             str: Readed message.
         """
-        # with self._connect() as conn:
         self.logger.debug("Reading ... ")
         sensor_data = conn.read_until(END)
         self.logger.debug("Readed message: \"%s\"", sensor_data)

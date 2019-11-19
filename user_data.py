@@ -13,7 +13,7 @@ kb = KnowledgeBase()
 kb.update_arduino_fact(arduinos)
 
 for arduino in arduinos.all:
-    
+
     slots = Slots(SLOTS_ENDPOINT, arduino["id"])
     plants = Plants(slots)
     plants.set_info()

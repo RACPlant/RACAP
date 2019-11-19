@@ -1,11 +1,12 @@
 import requests
 
+
 class Slots:
     def __init__(self, api_endpoint, arduino_id):
         self._api_endpoint = api_endpoint.format(arduino_id)
         self.arduino_id = arduino_id
-    
-    @property    
+
+    @property
     def all(self):
         return requests.get(self._api_endpoint).json()
         # {
@@ -22,6 +23,7 @@ class Slots:
         #         'humidity': 'h2'
         #     }
         # }
+
 
 class Devices:
     def __init__(self, api_endpoint):

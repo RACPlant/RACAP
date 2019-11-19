@@ -18,7 +18,7 @@ while True:
     time.sleep(60 * SLEEP_MINUTES)
     logger.info("Start loop...")
     for arduino in arduinos.all:
-        protocol = SerialProtocol(arduino["port"])
+        protocol=SerialProtocol(arduino["port"])
         try:
             protocol.get_metrics()
         except SerialException:

@@ -9,6 +9,7 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 DB_PATH = "./database/db/"
 
 
+# TODO: refactor
 class KnowledgeBase:
 
     logger = get_logger("KnowledgeBase")

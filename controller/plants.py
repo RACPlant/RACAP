@@ -3,6 +3,7 @@ import pandas as pd
 
 MAX_SLOTS = 10
 
+
 class Plants:
 
     def __init__(self, arduino_slots):
