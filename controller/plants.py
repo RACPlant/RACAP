@@ -1,13 +1,13 @@
+from controller.config import PLANTS_ENDPOINT
 import pandas as pd
 
 MAX_SLOTS = 10
 
-
 class Plants:
 
-    def __init__(self, arduino_id):
+    def __init__(self, arduino_slots):
         self._df = None
-        self._arduino = arduino_id
+        self._arduino_slots = arduino_slots
         self._by_slot = dict()
         self._water_info = dict()
         for slot in range(MAX_SLOTS):
@@ -23,7 +23,7 @@ class Plants:
     def _get_slot_facts(self):
         facts = []
         for slot in self._by_slot:
-            tuple_value = ",".join([str(self._arduino),
+            tuple_value = ",".join([str(self._arduino_slots.arduino_id),
                                     str(slot),
                                     str(self._by_slot[slot]["humidity"]),
                                     str(self._by_slot[slot]["pump"])
@@ -54,26 +54,8 @@ class Plants:
                 facts.append("eto_water({}).".format(tuple_value))
         return "\n".join(facts)
 
-    def __load_by_arduino(self):
-        # call jp API or mock
-        return {
-            '0': {
-                'botanical_name': 'Abelia chinensis',
-                'name': 'Pimenteira',
-                'pump': 'p1',
-                'humidity': 'h1'
-            },
-            '1': {
-                'botanical_name': 'Abelia floribunda',
-                'name': 'Samambaia',
-                'pump': 'p2',
-                'humidity': 'h2'
-            }
-        }
-
     def __load_info_dataset(self):
-        df = pd.read_csv(
-            "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-KbxCsv32_6xZfwCi-KQEUeVskm4cAomqczfHPWIYL-3Nj3D9aawaH6yPFohSzvkJaaU9VSjifk1P/pub?gid=590649384&single=true&output=csv")
+        df = pd.read_csv(PLANTS_ENDPOINT)
         cropped_df = df[["Botanical Name", "Eto", "Predicted", "Water"]]
         cropped_df.columns = ["botanical_name", "eto", "predicted", "water"]
         return cropped_df
@@ -82,7 +64,7 @@ class Plants:
         if not self._df:
             self._df = self.__load_info_dataset()
         if not any(self._by_slot.values()):
-            self._by_slot = self.__load_by_arduino()
+            self._by_slot = self._arduino_slots.all
             for slot in self._by_slot:
                 self._water_info[slot] = self._df[self._df["botanical_name"]
                                                   == self._by_slot[slot]["botanical_name"]].to_dict('records')

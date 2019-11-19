@@ -1,18 +1,43 @@
-class Arduino:
+import requests
+
+class Slots:
+    def __init__(self, api_endpoint, arduino_id):
+        self._api_endpoint = api_endpoint.format(arduino_id)
+        self.arduino_id = arduino_id
+    
+    @property    
+    def all(self):
+        return requests.get(self._api_endpoint).json()
+        # {
+        #     '0': {
+        #         'botanical_name': 'Abelia chinensis',
+        #         'name': 'Pimenteira',
+        #         'pump': 'p1',
+        #         'humidity': 'h1'
+        #     },
+        #     '1': {
+        #         'botanical_name': 'Abelia floribunda',
+        #         'name': 'Samambaia',
+        #         'pump': 'p2',
+        #         'humidity': 'h2'
+        #     }
+        # }
+
+class Devices:
     def __init__(self, api_endpoint):
         self._api_endpoint = api_endpoint
 
     @property
     def all(self):
-        # mock or call jp api
-        return [
-            {
-                "id": "arduino_1",
-                "port": "/dev/ttyACM0",
-                "radiation": "r",
-                "temperature": "t"
-            }
-        ]
+        return requests.get(self._api_endpoint).json()
+        # [
+        #     {
+        #         "id": "arduino_1",
+        #         "port": "/dev/ttyACM0",
+        #         "radiation": "r",
+        #         "temperature": "t"
+        #     }
+        # ]
 
     def _get_radiation_fact(self):
         facts = []

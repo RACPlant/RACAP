@@ -3,14 +3,15 @@ import time
 import sys
 from serial.serialutil import SerialException
 from controller import get_logger
-from social.devices import Arduino
+from controller.config import DEVICES_ENDPOINT
+from social.arduino import Devices
 from social.serial_protocol import SerialProtocol
 
 SLEEP_MINUTES = 2
 
 logger = get_logger("Requester")
 
-arduinos = Arduino("api_endpoint")
+arduinos = Devices(DEVICES_ENDPOINT
 
 while True:
     logger.info("Waiting {} minutes".format(SLEEP_MINUTES))

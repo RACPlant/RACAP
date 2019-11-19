@@ -3,12 +3,13 @@ import threading
 import uuid
 import time
 from serial.serialutil import SerialException
+from controller.config import DEVICES_ENDPOINT
 from controller import get_logger_to_file, get_logger
-from social.devices import Arduino
+from social.arduino import Devices
 from social.serial_protocol import SerialProtocol
 from social.parser import Parser
 
-arduinos = Arduino("api_endpoint")
+arduinos = Devices(DEVICES_ENDPOINT)
 
 protocols = [SerialProtocol(arduino["port"]) for arduino in arduinos.all]
 
