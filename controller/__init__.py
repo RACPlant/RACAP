@@ -1,25 +1,23 @@
 import logging
 import os
 
-LOGLEVEL = os.environ.get('LOGLEVE', 'INFO')
-logging.basicConfig(level=LOGLEVEL)
+LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO')
+logging.basicConfig(level=LOGLEVEL, handlers=[])
+fomatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(fomatter)
 
 
 def get_logger(name):
-    fomatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler = logging.StreamHandler()
-    handler.setFormatter(fomatter)
     logger = logging.getLogger(name)
-    logger.addHandler(handler)
+    logger.addHandler(stream_handler)
     return logger
 
 
 def get_logger_to_file(name):
-    fomatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler = logging.FileHandler('{}.log'.format(name))
-    handler.setFormatter(fomatter)
+    file_handler = logging.FileHandler('{}.log'.format(name))
+    file_handler.setFormatter(fomatter)
     logger = logging.getLogger(name)
-    logger.addHandler(handler)
+    logger.addHandler(file_handler)
     return logger
