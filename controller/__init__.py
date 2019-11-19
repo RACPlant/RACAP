@@ -2,7 +2,7 @@ import logging
 import os
 
 LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO')
-logging.basicConfig(level=LOGLEVEL, handlers=[])
+logging.basicConfig(level=LOGLEVEL)
 fomatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 stream_handler = logging.StreamHandler()
