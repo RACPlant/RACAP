@@ -8,5 +8,5 @@ class Planner(MAPE):
         how_much = []
         for plant in who_needs:
             plant["arduino_id"] = arduino_id
-            how_much = self._kb.query("how_much_water({arduino_id},{Slot},{Plant},Pump,Water)".format(**plant))
+            how_much = self._kb.query("how_much_water({arduino_id},{Slot},{Plant},Pump,Water,ETo)".format(**plant))
         return how_much

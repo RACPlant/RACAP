@@ -31,7 +31,7 @@ class Sensor:
     @value.setter
     def value(self, value):
         _last_value = float(value)
-        if len(self._samples) < NOISE_ATTENUATOR:
+        if len(self._samples) <= NOISE_ATTENUATOR:
             self._samples.append(_last_value)
         else:
             self._samples.append(_last_value)
