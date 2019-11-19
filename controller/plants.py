@@ -32,21 +32,21 @@ class Plants:
         return "\n".join(facts)
 
     def _get_plant_facts(self):
-        facts = []
-        for slot in self._by_slot.keys():
-            for water_info in self._water_info[slot]:
-                tuple_value = ",".join([str(self._arduino),
-                                        str(slot),
-                                        str(water_info["botanical_name"]).lower().replace(" ","_")
-                                        ])
-                facts.append("plant({}).".format(tuple_value))
-        return "\n".join(facts)
+        facts = set()
+        for slot, plant in self._by_slot.items():
+            tuple_value = ",".join([str(self._arduino),
+                                    str(slot),
+                                    str(plant["botanical_name"]
+                                        ).lower().replace(" ", "_")
+                                    ])
+            facts.add("plant({}).".format(tuple_value))
+        return "\n".join(list(facts))
 
     def _get_eto_facts(self):
         facts = []
         for slot in self._by_slot:
             for water_info in self._water_info[slot]:
-                tuple_value = ",".join([str(water_info["botanical_name"]).lower().replace(" ","_"),
+                tuple_value = ",".join([str(water_info["botanical_name"]).lower().replace(" ", "_"),
                                         str(water_info["eto"]),
                                         str(water_info["predicted"]),
                                         str(water_info["water"])
