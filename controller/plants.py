@@ -1,4 +1,5 @@
 from controller.config import PLANTS_ENDPOINT
+from social.arduino import Slots
 import pandas as pd
 
 MAX_SLOTS = 10
@@ -6,7 +7,7 @@ MAX_SLOTS = 10
 
 class Plants:
 
-    def __init__(self, arduino_slots):
+    def __init__(self, arduino_slots: Slots):
         self._df = None
         self._arduino_slots = arduino_slots
         self._by_slot = dict()
@@ -16,10 +17,10 @@ class Plants:
 
     def get_all_facts(self):
         facts = []
-        facts.append(self._get_slot_facts())
-        facts.append(self._get_eto_facts())
-        facts.append(self._get_plant_facts())
-        return "\n".join(facts)
+        facts.extend(self._get_slot_facts())
+        facts.extend(self._get_eto_facts())
+        facts.extend(self._get_plant_facts())
+        return facts
 
     def _get_slot_facts(self):
         facts = []
@@ -30,7 +31,7 @@ class Plants:
                                     str(self._by_slot[slot]["pump"])
                                     ])
             facts.append("slot({}).".format(tuple_value))
-        return "\n".join(facts)
+        return facts
 
     def _get_plant_facts(self):
         facts = []
@@ -41,7 +42,7 @@ class Plants:
                                         ).lower().replace(" ", "_")
                                     ])
             facts.append("plant({}).".format(tuple_value))
-        return "\n".join(facts)
+        return facts
 
     def _get_eto_facts(self):
         facts = []
@@ -53,7 +54,7 @@ class Plants:
                                         str(water_info["water"])
                                         ])
                 facts.append("eto_water({}).".format(tuple_value))
-        return "\n".join(facts)
+        return facts
 
     def __load_info_dataset(self):
         df = pd.read_csv(PLANTS_ENDPOINT)

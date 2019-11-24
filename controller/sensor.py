@@ -8,7 +8,7 @@ class Sensor:
     def __init__(self, arduino_id, sensor_id):
         self.arduino_id = arduino_id
         self.sensor_id = sensor_id
-        self._last_value = 0
+        self._last_value = None
         self._max = 0
         self._min = 1023
         self._sum = 0
@@ -16,6 +16,9 @@ class Sensor:
         self._samples = []
 
     def get_fact(self):
+        if not self._last_value:
+            return None
+
         tuple_value = ",".join([self.arduino_id,
                                 self.sensor_id,
                                 str(self._last_value),

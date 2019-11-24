@@ -1,9 +1,12 @@
 
 from datetime import datetime
 from os import path
-from controller.config import DB_PATH
+from controller.config import DB_PATH, RASPBERRY_ID
 from abc import ABC
 from controller.sensor import Sensor
+from controller import get_logger
+from controller.plants import Plants
+from social.arduino import Devices
 
 
 class Database(ABC):
@@ -11,6 +14,7 @@ class Database(ABC):
 
     def __init__(self):
         self._memory_db = {}
+        self._logger = get_logger(self.__class__.__name__)
 
     def get_file_path(self):
         return path.join(DB_PATH, self._filename)
@@ -30,31 +34,43 @@ class Database(ABC):
 
 class DatabaseMetric(Database):
     _filename = "metrics.pl"
-    # Utilizar modelos do tipo Metric para incluir/atualizar o arquivo arduino.pl
 
     def _get_facts(self):
-        pass
+        facts = []
+        for arduino_id, sensors_dict in self._memory_db.items():
+            for sensor_id, sensor in sensors_dict.items():
+                fact = sensor.get_fact()
+                if fact:
+                    facts.append(sensor.get_fact())
+        return sorted(facts)
 
-    def add_metric(self, arduino, sensor, value):
-        if not self._kb_metrics_dict.get(arduino):
-            self._kb_metrics_dict[arduino] = {}
+    def add_metric_fact(self, arduino, sensor, value):
+        if not self._memory_db.get(arduino):
+            self._memory_db[arduino] = {}
 
-        if not self._kb_metrics_dict[arduino].get(sensor):
-            self._kb_metrics_dict[arduino][sensor] = Sensor(arduino, sensor)
-
-        self._kb_metrics_dict[arduino][sensor].value = value
-
-
-class DatabasePlant:
-    # Utilizar modelos do tipo Plant para incluir/atualizar o arquivo arduino.pl
-    pass
+        if not self._memory_db[arduino].get(sensor):
+            self._memory_db[arduino][sensor] = Sensor(arduino, sensor)
+        self._memory_db[arduino][sensor].value = value
 
 
-class DatabaseArduino:
-    # Utilizar modelos do tipo Arduino para incluir/atualizar o arquivo arduino.pl
+class DatabasePlant(Database):
+    _filename = "plants.pl"
+
+    def add_plants_fact(self, arduino: str, plant: Plants):
+        self._memory_db[arduino] = plant.get_all_facts()
 
     def _get_facts(self):
-        pass
+        facts = []
+        for fact_list in self._memory_db.values():
+            facts.extend(fact_list)
+        return sorted(facts)
 
-    def add_arduino(self):
-        pass
+
+class DatabaseArduino(Database):
+    _filename = "arduino.pl"
+
+    def add_arduino_fact(self, arduinos: Devices):
+        self._memory_db[RASPBERRY_ID] = arduinos.get_all_facts()
+
+    def _get_facts(self):
+        return sorted(self._memory_db[RASPBERRY_ID])
