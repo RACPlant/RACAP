@@ -1,6 +1,7 @@
 from database import DatabaseMetric, DatabasePlant, DatabaseArduino
 from controller.plants import Plants
 from social.arduino import Devices
+from controller.sensor import NOISE_ATTENUATOR
 import unittest
 from unittest import mock
 
@@ -131,7 +132,7 @@ class DatabaseMetricTestCase(unittest.TestCase):
 
     def test_add_metric_fact_without_atenuator(self):
         db_metrics = DatabaseMetric()
-        for i in range(20):
+        for i in range(NOISE_ATTENUATOR + 1):
             db_metrics.add_metric_fact("a1", "t", 10)
             db_metrics.add_metric_fact("a1", "r", 10)
             db_metrics.add_metric_fact("a2", "t", 10)
