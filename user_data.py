@@ -23,4 +23,4 @@ for arduino in arduinos.all:
 
     db_plants.add_plants_fact(arduino["id"], plants)
 
-db_plants.update_plants_fact()
+db_plants.update_database()
