@@ -6,14 +6,14 @@ from controller.config import DEVICES_ENDPOINT
 from mape.cycle import Cycle
 from social.arduino import Devices
 from social.serial_protocol import SerialProtocol
-from database.knowledge_base import KnowledgeBase
+from database import DatabaseMetric
 
 
 logger = get_logger("Main")
 
-kb = KnowledgeBase()
+db_metrics = DatabaseMetric()
 
-log_parser = LogParser(kb)
+log_parser = LogParser(db_metrics)
 
 if log_parser.has_files():
 

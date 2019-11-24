@@ -74,3 +74,6 @@ class DatabaseArduino(Database):
 
     def _get_facts(self):
         return sorted(self._memory_db[RASPBERRY_ID])
+
+
+AllDatabases = [DatabaseArduino(), DatabaseMetric(), DatabasePlant()]

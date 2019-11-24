@@ -1,5 +1,6 @@
 from os import path
 from database.knowledge_base import KnowledgeBase
+from database import AllDatabases
 
 
 class MAPE:
@@ -7,7 +8,8 @@ class MAPE:
 
     def __init__(self):
         rules_files = self._get_rules()
-        self._kb = KnowledgeBase(rules_files)
+        # TODO: Check if all MAPE stages will really need all databases
+        self._kb = KnowledgeBase(rules_files, AllDatabases)
 
     def _get_rules(self):
         base_folder = "./mape/rules/"

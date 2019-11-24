@@ -1,12 +1,13 @@
 import json
 import glob
+from database import DatabaseMetric
 
 LOG_FILES = glob.glob("Consumer*.log")
 
 
 class LogParser:
-    def __init__(self, kb, log_files=LOG_FILES):
-        self._kb = kb
+    def __init__(self, db: DatabaseMetric, log_files=LOG_FILES):
+        self._db = db
         self._log_files = log_files
 
     def _parser_line(self, line):
@@ -17,7 +18,7 @@ class LogParser:
         return json.loads(json_line)
 
     def _as_fact(self, metric_log):
-        self._kb.add_metric_fact(
+        self._db.add_metric_fact(
             metric_log['arduino'],
             metric_log['sensor'],
             metric_log['value']
@@ -32,7 +33,7 @@ class LogParser:
                 line = consumer_logfile.readline()
 
     def _save_facts(self):
-        self._kb.update_metrics_file()
+        self._db.update_database()
 
     def has_files(self):
         return bool(len(self._log_files))

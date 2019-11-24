@@ -4,13 +4,16 @@ from controller import get_logger
 from controller.config import DEVICES_ENDPOINT, SLOTS_ENDPOINT
 from controller.plants import Plants
 from social.arduino import Devices, Slots
-from database.knowledge_base import KnowledgeBase
+from database import DatabasePlant, DatabaseArduino
 
 logger = get_logger("Requester")
 
 arduinos = Devices(DEVICES_ENDPOINT)
-kb = KnowledgeBase()
-kb.update_arduino_fact(arduinos)
+db_plants = DatabasePlant()
+
+db_arduino = DatabaseArduino()
+db_arduino.add_arduino_fact(arduinos)
+db_arduino.update_database()
 
 for arduino in arduinos.all:
 
@@ -18,6 +21,6 @@ for arduino in arduinos.all:
     plants = Plants(slots)
     plants.set_info()
 
-    kb.add_plants_fact(arduino["id"], plants)
+    db_plants.add_plants_fact(arduino["id"], plants)
 
-kb.update_plants_fact()
+db_plants.update_plants_fact()
