@@ -6,7 +6,7 @@ from controller.plants import Plants
 from social.arduino import Devices, Slots
 from database import DatabasePlant, DatabaseArduino
 
-logger = get_logger("Requester")
+logger = get_logger("UserData")
 
 arduinos = Devices(DEVICES_ENDPOINT)
 db_plants = DatabasePlant()
@@ -16,11 +16,12 @@ db_arduino.add_arduino_fact(arduinos)
 db_arduino.update_database()
 
 for arduino in arduinos.all:
-
-    slots = Slots(SLOTS_ENDPOINT, arduino["id"])
+    arduino_id = arduino["id"]
+    logger.info("Load Plants data of arduino {}".format(arduino_id))
+    slots = Slots(SLOTS_ENDPOINT, arduino_id)
     plants = Plants(slots)
     plants.set_info()
 
-    db_plants.add_plants_fact(arduino["id"], plants)
+    db_plants.add_plants_fact(arduino_id, plants)
 
 db_plants.update_database()

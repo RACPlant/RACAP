@@ -28,6 +28,7 @@ class Database(ABC):
         text = "{}\n%%update database time: {}".format(
             facts_text, datetime.now())
 
+        self._logger.info("Writing {} file.".format(self.get_file_path()))
         with open(self.get_file_path(), "+w") as pl_file:
             pl_file.write(text)
 
@@ -51,6 +52,11 @@ class DatabaseMetric(Database):
         if not self._memory_db[arduino].get(sensor):
             self._memory_db[arduino][sensor] = Sensor(arduino, sensor)
         self._memory_db[arduino][sensor].value = value
+        self._logger.debug(
+            "add metric fact. arduinto={}, sensor={}, value={}".format(
+                arduino,
+                sensor,
+                value))
 
 
 class DatabasePlant(Database):
@@ -58,6 +64,7 @@ class DatabasePlant(Database):
 
     def add_plants_fact(self, arduino: str, plant: Plants):
         self._memory_db[arduino] = plant.get_all_facts()
+        self._logger.debug("add all plats fact. arduino={}".format(arduino))
 
     def _get_facts(self):
         facts = []
@@ -71,6 +78,8 @@ class DatabaseArduino(Database):
 
     def add_arduino_fact(self, arduinos: Devices):
         self._memory_db[RASPBERRY_ID] = arduinos.get_all_facts()
+        self._logger.debug(
+            "add all arduinos fact. raspberry={}".format(RASPBERRY_ID))
 
     def _get_facts(self):
         return sorted(self._memory_db[RASPBERRY_ID])

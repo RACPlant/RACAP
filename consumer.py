@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 import threading
-import uuid
 import time
+import os
 from serial.serialutil import SerialException
 from controller.config import DEVICES_ENDPOINT
 from controller import get_logger_to_file, get_logger
@@ -9,15 +8,19 @@ from social.arduino import Devices
 from social.serial_protocol import SerialProtocol
 from social.parser import Parser
 
-arduinos = Devices(DEVICES_ENDPOINT)
+CONNECTION_BACKOFF_TIME = 60
 
+arduinos = Devices(DEVICES_ENDPOINT)
 protocols = [SerialProtocol(arduino["port"]) for arduino in arduinos.all]
 
+main_thread_logger = get_logger("Consumer")
 
-def consume_serial(protocol):
-    logger = get_logger_to_file("Consumer{}".format(uuid.uuid4().hex))
+
+def consume_serial(protocol: SerialProtocol):
+    port_id = os.path.basename(protocol.serial_port)
+    logger = get_logger_to_file("Consumer_{}".format(port_id))
     parser = Parser()
-    error_logger = get_logger("Consume")
+    error_logger = get_logger("ConsumeErrorLog_{}".format(port_id))
 
     def loop_and_parse(conn):
         while True:
@@ -27,7 +30,7 @@ def consume_serial(protocol):
                 for metric in parsed_data:
                     logger.info(metric)
             except IOError:
-                logger.info("Error to parse message:{}".format(data))
+                error_logger.info("Error to parse message:{}".format(data))
 
     def connect_and_parse():
         try:
@@ -38,13 +41,16 @@ def consume_serial(protocol):
         except SerialException:
             error_logger.error(
                 "Error connecting to port {}".format(protocol.serial_port))
-            time.sleep(60)
-            error_logger.error("Retrying port {}".format(protocol.serial_port))
+            error_logger.error("Waiting {}s to retry".format(
+                CONNECTION_BACKOFF_TIME))
+            time.sleep(CONNECTION_BACKOFF_TIME)
             connect_and_parse()
 
     connect_and_parse()
 
 
 for protocol in protocols:
+    main_thread_logger.info(
+        "Starting new thread to read port: {}".format(protocol.serial_port))
     t = threading.Thread(target=consume_serial, args=(protocol,))
     t.start()

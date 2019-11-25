@@ -15,10 +15,10 @@ db_metrics = DatabaseMetric()
 
 log_parser = LogParser(db_metrics)
 
-if log_parser.has_files():
-
+if not log_parser.has_files():
+    logger.info("Logfiles do not exist")
+else:
     log_parser.parse_all_files()
-
     arduinos = Devices(DEVICES_ENDPOINT)
 
     for arduino in arduinos.all:
